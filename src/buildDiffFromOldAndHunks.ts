@@ -17,7 +17,7 @@ export type BuildDiffFromOldAndHunksOptions = {
   theme?: 'light' | 'dark'
 }
 
-// diff 统计信息，供 UI 与测试使用。
+// diff 统计信息，供 UI 使用。
 export type DiffStats = {
   // 新增行数。
   additions: number

@@ -21,12 +21,6 @@ pnpm dev
 
 浏览器会自动打开 demo 页面。
 
-### 测试
-
-```bash
-pnpm test
-```
-
 ## 注意事项
 
 - 本 demo 使用 `@git-diff-view/core` 的 `DiffFile`，不是 `@git-diff-view/file` 的 `generateDiffFile`。
