@@ -9,8 +9,9 @@ import {
   buildDiffFromOldAndHunks,
   getDiffStats,
   getExpandEnabled,
+  getHasCollapsedLines,
 } from './buildDiffFromOldAndHunks'
-// 引入 git hunk 样例。
+// 引入 git patch 样例。
 import { counterGitPatch } from './sampleGitHunks'
 // 引入旧版完整源码样例。
 import { oldCounterSource } from './sampleOldSource'
@@ -41,26 +42,27 @@ const App: FC = () => {
   const stats = useMemo(() => getDiffStats(diffFile), [diffFile])
   // 读取是否允许点击展开折叠上下文。
   const expandEnabled = useMemo(() => getExpandEnabled(diffFile), [diffFile])
+  // 读取当前视图里是否真的有折叠行。
+  const hasCollapsedLines = useMemo(() => getHasCollapsedLines(diffFile), [diffFile])
+
+  // 根据能力与实际折叠状态生成提示文案。
+  const expandHint = !expandEnabled
+    ? 'Hunk 展开未启用：通常发生在仅传 hunks、不传任何文件全文的模式。'
+    : hasCollapsedLines
+      ? '下方 diff 中有折叠区（…）：点击可展开 patch 外的上下文。本 demo 用 git diff -U0 刻意制造折叠。'
+      : 'Hunk 展开能力已启用，但当前 patch 覆盖了几乎全部行，看不到折叠区。请改用 -U0 或减少 context。'
 
   // 渲染整个 demo 页面。
   return (
     <div style={{ padding: 24, maxWidth: 1200, margin: '0 auto' }}>
-      <Card title="old 全文 + git hunks 演示">
+      <Card title="old 全文 + git patch 演示">
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <Typography.Paragraph type="secondary">
-            输入只有 base 分支的 Counter.tsx 完整内容与 git unified diff hunk，不传 new
-            文件全文。库会合成 new 侧内容，并允许展开 hunk 外的上下文行。
+            输入 base 分支 Counter.tsx 完整内容与 git patch（不传 new 全文）。patch 使用
+            -U0，文件头部/尾部等未改动行会被折叠；点击折叠条即可从 old 全文展开。
           </Typography.Paragraph>
 
-          <Alert
-            type="info"
-            showIcon
-            message={
-              expandEnabled
-                ? 'Hunk 展开已启用：可点击折叠区查看 patch 外的上下文。'
-                : 'Hunk 展开未启用：通常发生在仅传 hunks、不传任何文件全文的模式。'
-            }
-          />
+          <Alert type={hasCollapsedLines ? 'success' : 'warning'} showIcon message={expandHint} />
 
           <Space wrap>
             <Segmented

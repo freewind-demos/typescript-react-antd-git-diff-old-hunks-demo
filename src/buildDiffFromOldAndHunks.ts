@@ -60,3 +60,6 @@ export const getDiffStats = (file: DiffFileType): DiffStats => ({
 
 // 读取库是否允许 hunk 展开（old + hunks 模式应为 true）。
 export const getExpandEnabled = (file: DiffFileType): boolean => file.getExpandEnabled()
+
+// 读取是否存在被折叠、可点击展开的行。
+export const getHasCollapsedLines = (file: DiffFileType): boolean => file.hasSomeLineCollapsed

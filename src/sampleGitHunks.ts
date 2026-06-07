@@ -1,24 +1,16 @@
-// 由 git diff --no-index -U3 生成的 unified diff（含 ---/+++ 文件头，不含 new 全文）。
-// 模拟 PR patch：前端只传 base 文件 + 这段 patch。
+// 由 git diff --no-index -U0 生成的 unified diff（零 context，故意折叠 patch 外大量行）。
 export const counterGitPatch = `--- a/Counter.tsx
 +++ b/Counter.tsx
-@@ -1,13 +1,15 @@
- import { FC, useState } from 'react'
- 
+@@ -7 +7 @@ const MAX_COUNT = 99
 -// 旧版：只有加号按钮。
 +// 新版：支持加减与重置。
- export const Counter: FC = () => {
-   const [count, setCount] = useState(0)
- 
-   return (
+@@ -12 +12 @@ export const Counter: FC = () => {
 -    <div>
 +    <section>
-       <p>Count: {count}</p>
+@@ -13,0 +14 @@ export const Counter: FC = () => {
 +      <button onClick={() => setCount(count - 1)}>-1</button>
-       <button onClick={() => setCount(count + 1)}>+1</button>
+@@ -15 +16,2 @@ export const Counter: FC = () => {
 -    </div>
 +      <button onClick={() => setCount(0)}>Reset</button>
 +    </section>
-   )
- }
 `

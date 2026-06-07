@@ -34,6 +34,7 @@ pnpm test
 - `hunks` 必须是对这份 old 文件合法的标准 unified diff（例如 `git diff` 的输出），且需包含 `---`/`+++` 文件头；仅有 `@@` hunk 行时库无法统计增删行。
 - 若 old 内容与 hunks 不一致，开发模式下库会在控制台给出 mismatch 警告。
 - 仅传 hunks、两侧全文都空时，库会走 `composeByDiff` 路径，**无法展开**更多上下文；本 demo 刻意避免那种输入。
+- **能否看到折叠条**，取决于 patch 是否覆盖全文：`-U3` 且文件很短时，可能全部行都在 hunk 里，`hasSomeLineCollapsed` 为 false，页面上没有「…」可点。本 demo 用更长文件 + `-U0`，确保 patch 外行被折叠。
 
 ## 教程
 
@@ -50,7 +51,7 @@ pnpm test
 ### demo 原理
 
 1. `sampleOldSource.ts` 保存 base 版 `Counter.tsx` 全文
-2. `sampleGitHunks.ts` 保存 `git diff --no-index -U3` 生成的 patch（含 `---`/`+++` 文件头）
+2. `sampleGitHunks.ts` 保存 `git diff --no-index -U0` 生成的 patch（零 context，含 `---`/`+++` 文件头）
 3. `buildDiffFromOldAndHunks.ts` 创建 `DiffFile` → `initTheme` → `init` → `buildSplitDiffLines` / `buildUnifiedDiffLines`
 4. `App.tsx` 把 `diffFile` 交给 `DiffView`，并用 antd 切换 Split/Unified、暗色主题、语法高亮
 
